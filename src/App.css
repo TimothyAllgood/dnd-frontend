@@ -1,0 +1,48 @@
+:root {
+	--main-color: #22373e;
+	--main-hover: #437c92;
+	--text: #333;
+	--white: #f1f1f1;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul {
+	list-style: none;
+}
+
+/* General */
+body {
+	line-height: 1.6;
+	font-size: 15px;
+	font-family: 'Work Sans', sans-serif;
+	background-color: var(--white);
+	color: var(--text);
+	max-width: 100vw;
+	overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: 'Rakkas', cursive;
+	letter-spacing: 2px;
+}
+
+.container {
+	width: 90vw;
+	margin: 0 auto;
+}
+
+.adventurer {
+	color: rgb(235, 78, 78);
+}
