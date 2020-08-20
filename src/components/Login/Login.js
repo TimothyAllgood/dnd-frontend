@@ -20,7 +20,7 @@ export class Login extends Component {
 		try {
 			const res = await User.login(this.state);
 
-			// this.props.setCurrentUser(res.data.token);
+			this.props.setCurrentUser(res.data.token);
 
 			console.log(res);
 			this.props.history.push('/');
