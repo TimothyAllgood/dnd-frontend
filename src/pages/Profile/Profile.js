@@ -13,6 +13,7 @@ class Profile extends Component {
 		city: '',
 		lat: '',
 		lng: '',
+		img: '',
 	};
 
 	async componentDidMount() {
@@ -27,6 +28,7 @@ class Profile extends Component {
 			city: user.city,
 			lat: user.lat,
 			lng: user.lng,
+			img: user.profileImg,
 		};
 		this.setState(userInfo);
 		if (!user.city) {
@@ -49,6 +51,7 @@ class Profile extends Component {
 
 			navigator.geolocation.getCurrentPosition(success, error, options);
 		}
+		this.setCheckbox(this.state.games);
 	}
 
 	async reverseGeocode(lat, lng) {
@@ -65,6 +68,18 @@ class Profile extends Component {
 		}
 	}
 
+	setCheckbox = (games) => {
+		// console.log('hello');
+		const checkboxes = document.querySelectorAll('.checkbox');
+		for (let i = 0; i < games.length; i++) {
+			if (checkboxes[i].value === games[i]) {
+				checkboxes[i].checked = 'true';
+			} else {
+				checkboxes[i].checked = 'false';
+			}
+		}
+	};
+
 	handleChange = (e) => {
 		if (e.target.type === 'checkbox') {
 			if (e.target.checked) {
@@ -78,6 +93,17 @@ class Profile extends Component {
 			}
 		}
 		this.setState({ [e.target.name]: e.target.value });
+	};
+
+	handleImgChange = (e) => {
+		const img = document.querySelector('.profile-img');
+		const reader = new FileReader();
+		const file = e.target.files[0];
+		reader.onloadend = function () {
+			img.src = reader.result;
+		};
+		reader.readAsDataURL(file);
+		this.setState({ img: file });
 	};
 
 	handleTomTomChange = (e) => {
@@ -113,11 +139,31 @@ class Profile extends Component {
 		}
 	};
 
+	handleImgSubmit = async (e) => {
+		e.preventDefault();
+		e.preventDefault();
+		try {
+			const res = await User.updateImg(
+				this.props.match.params.id,
+				this.state.img
+			);
+
+			console.log(res);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	render() {
 		const state = this.state;
 		return (
 			<section>
 				<div className='profile-left'>
+					<img src={this.state.img} className='profile-img' alt='' />
+					<form onSubmit={this.handleImgSubmit} encType='multipart/form-data'>
+						<input onChange={this.handleImgChange} type='file' name='img' />
+						<button type='submit'>Update Image</button>
+					</form>
 					<h2>{state.username}</h2>
 					<p>{state.roles ? state.roles : 'No role'}</p>
 				</div>
@@ -161,7 +207,7 @@ class Profile extends Component {
 								style={{ display: 'none' }}
 							></select>
 						</div>
-						<div className='form-group'>
+						<div className='form-group checkbox-container'>
 							<label htmlFor='games'>Games</label>
 							<label htmlFor='5e'>D&D5e</label>
 							<input
@@ -169,6 +215,7 @@ class Profile extends Component {
 								name='D&D5e'
 								id='5e'
 								value='D&D5e'
+								className='checkbox'
 								onChange={this.handleChange}
 							/>
 							<label htmlFor='PF'>Pathfinder 2e</label>
@@ -177,6 +224,7 @@ class Profile extends Component {
 								name='PF'
 								id='PF'
 								value='PF'
+								className='checkbox'
 								onChange={this.handleChange}
 							/>
 						</div>

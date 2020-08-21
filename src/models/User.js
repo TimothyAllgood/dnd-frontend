@@ -18,4 +18,16 @@ export default class User {
 	static update = async (userID, user) => {
 		return axios.post(`${BASE_URL}/v1/users/${userID}`, user);
 	};
+
+	static updateImg = async (userID, img) => {
+		const formData = new FormData();
+		formData.append('img', img);
+		const config = {
+			headers: {
+				'content-type': 'multipart/form-data',
+			},
+		};
+
+		return axios.post(`${BASE_URL}/v1/users/image/${userID}`, formData, config);
+	};
 }
