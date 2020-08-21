@@ -29,9 +29,54 @@ class Profile extends Component {
 			lng: user.lng,
 		};
 		this.setState(userInfo);
+		if (!user.city) {
+			// Get user location using geolocation
+			const options = {
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0,
+			};
+			const success = (pos) => {
+				var crd = pos.coords;
+
+				this.setState({ lat: crd.latitude, lng: crd.longitude });
+				this.reverseGeocode(crd.latitude, crd.longitude);
+			};
+
+			const error = (err) => {
+				console.warn(`ERROR(${err.code}): ${err.message}`);
+			};
+
+			navigator.geolocation.getCurrentPosition(success, error, options);
+		}
+	}
+
+	async reverseGeocode(lat, lng) {
+		// Reverse geocode the lat, lng from the geolocation and add city to db
+		const url = `https://api.tomtom.com/search/2/reverseGeocode/${lat}%2C${lng}.json?key=ojL8SrkEk0ntNQEO0Z1NUfadlxaugNYO`; // Sets url to use value of input for query
+		const res = await axios.get(url); // Returns the data from the api call
+		this.setState({ city: res.data.addresses[0].address.freeformAddress });
+		try {
+			const res = await User.update(this.props.match.params.id, this.state);
+
+			console.log(res);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	handleChange = (e) => {
+		if (e.target.type === 'checkbox') {
+			if (e.target.checked) {
+				this.setState({ games: [...this.state.games, e.target.name] });
+			} else {
+				const removal = this.state.games.filter((value, index, arr) => {
+					return value !== e.target.name;
+				});
+				this.setState({ games: removal });
+				console.log(removal);
+			}
+		}
 		this.setState({ [e.target.name]: e.target.value });
 	};
 
@@ -97,6 +142,16 @@ class Profile extends Component {
 							</select>
 						</div>
 						<div className='form-group'>
+							<label htmlFor='bio'>About</label>
+							<input
+								type='text'
+								name='bio'
+								id='bio'
+								value={state.bio}
+								onChange={this.handleChange}
+							/>
+						</div>
+						<div className='form-group'>
 							<label htmlFor='city'>City</label>
 							<p>{state.city}</p>
 							<input type='text' name='city' onChange={this.handleTomTom} />
@@ -105,6 +160,25 @@ class Profile extends Component {
 								id='cities'
 								style={{ display: 'none' }}
 							></select>
+						</div>
+						<div className='form-group'>
+							<label htmlFor='games'>Games</label>
+							<label htmlFor='5e'>D&D5e</label>
+							<input
+								type='checkbox'
+								name='D&D5e'
+								id='5e'
+								value='D&D5e'
+								onChange={this.handleChange}
+							/>
+							<label htmlFor='PF'>Pathfinder 2e</label>
+							<input
+								type='checkbox'
+								name='PF'
+								id='PF'
+								value='PF'
+								onChange={this.handleChange}
+							/>
 						</div>
 						<button type='submit'>Update Form</button>
 					</form>
