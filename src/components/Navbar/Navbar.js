@@ -15,8 +15,13 @@ function Navbar({ currentUser, username, logout }) {
 					{currentUser && (
 						<>
 							<li className='nav-item'>
-								<NavLink className='nav-link' to={`/users/${currentUser}`}>
+								<NavLink className='nav-link' to={`/profile/${currentUser}`}>
 									Welcome, {username}
+								</NavLink>
+							</li>
+							<li className='nav-item'>
+								<NavLink className='nav-link' to={`/nearby/${currentUser}`}>
+									Nearby
 								</NavLink>
 							</li>
 							<li className='nav-item'>

@@ -30,4 +30,8 @@ export default class User {
 
 		return axios.post(`${BASE_URL}/v1/users/image/${userID}`, formData, config);
 	};
+
+	static addFriend = async (userID, friend) => {
+		return axios.post(`${BASE_URL}/v1/users/addfriend/${userID}`, friend);
+	};
 }

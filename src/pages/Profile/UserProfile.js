@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import User from '../../models/User';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 require('./Profile.css');
 
 class Profile extends Component {
@@ -168,6 +169,9 @@ class Profile extends Component {
 			);
 
 			console.log(res);
+			this.setState({ img: res.data.updatedUser.profileImg });
+			const imgForm = document.querySelector('.img-form');
+			imgForm.classList.add('hidden');
 		} catch (error) {
 			console.log(error);
 		}
@@ -415,4 +419,4 @@ class Profile extends Component {
 	}
 }
 
-export default Profile;
+export default withRouter(Profile);
