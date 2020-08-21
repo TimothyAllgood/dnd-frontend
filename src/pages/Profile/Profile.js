@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import User from '../../models/User';
 import axios from 'axios';
+require('./Profile.css');
 
 class Profile extends Component {
 	state = {
@@ -31,27 +32,30 @@ class Profile extends Component {
 			img: user.profileImg,
 		};
 		this.setState(userInfo);
-		if (!user.city) {
-			// Get user location using geolocation
-			const options = {
-				enableHighAccuracy: true,
-				timeout: 5000,
-				maximumAge: 0,
-			};
-			const success = (pos) => {
-				var crd = pos.coords;
+		if (this.props.currentUser) {
+			if (!user.city) {
+				// Get user location using geolocation
+				const options = {
+					enableHighAccuracy: true,
+					timeout: 5000,
+					maximumAge: 0,
+				};
+				const success = (pos) => {
+					var crd = pos.coords;
 
-				this.setState({ lat: crd.latitude, lng: crd.longitude });
-				this.reverseGeocode(crd.latitude, crd.longitude);
-			};
+					this.setState({ lat: crd.latitude, lng: crd.longitude });
+					this.reverseGeocode(crd.latitude, crd.longitude);
+				};
 
-			const error = (err) => {
-				console.warn(`ERROR(${err.code}): ${err.message}`);
-			};
+				const error = (err) => {
+					console.warn(`ERROR(${err.code}): ${err.message}`);
+				};
 
-			navigator.geolocation.getCurrentPosition(success, error, options);
+				navigator.geolocation.getCurrentPosition(success, error, options);
+			}
+			this.setCheckbox(this.state.games);
+			this.handleSelect(this.state.roles);
 		}
-		this.setCheckbox(this.state.games);
 	}
 
 	async reverseGeocode(lat, lng) {
@@ -96,7 +100,7 @@ class Profile extends Component {
 	};
 
 	handleImgChange = (e) => {
-		const img = document.querySelector('.profile-img');
+		const img = document.querySelector('.preview');
 		const reader = new FileReader();
 		const file = e.target.files[0];
 		reader.onloadend = function () {
@@ -154,82 +158,228 @@ class Profile extends Component {
 		}
 	};
 
+	toggleForm = (e) => {
+		const imgForm = document.querySelector('.img-form');
+		imgForm.classList.toggle('hidden');
+	};
+
+	toggleReadOnly = (e) => {
+		const parent = e.target.parentElement.parentElement;
+		const inputEl = parent.querySelector('input');
+		const i = parent.querySelector('i');
+		console.log(inputEl.id);
+		if (inputEl.readOnly) {
+			inputEl.readOnly = false;
+			i.classList.remove('fa-pencil-alt');
+			i.classList.add('fa-times');
+		} else {
+			inputEl.readOnly = true;
+			i.classList.add('fa-pencil-alt');
+			i.classList.remove('fa-times');
+		}
+	};
+	toggleTomTomReadOnly = (e) => {
+		const parent = e.target.parentElement.parentElement;
+		const inputEl = document.getElementById('city');
+		const i = document.querySelector(
+			'#root > main > section > div.profile-right > form > div.form-group.city-group > span > i'
+		);
+		console.log(inputEl.id);
+		if (inputEl.readOnly) {
+			inputEl.readOnly = false;
+			i.classList.remove('fa-pencil-alt');
+			i.classList.add('fa-times');
+
+			document.querySelector('.cities-search').style.opacity = '1';
+			parent.querySelector('#cities').style.display = 'initial';
+		} else {
+			inputEl.readOnly = true;
+			i.classList.add('fa-pencil-alt');
+			i.classList.remove('fa-times');
+
+			parent.querySelector('#cities').style.display = 'none';
+			document.querySelector('.cities-search').style.opacity = '0';
+		}
+	};
+
+	handleSelect = (role) => {
+		const selectEl = document.getElementById('roles');
+		const options = selectEl.querySelectorAll('option');
+		options.forEach((option) => {
+			console.log(role);
+			if (option.value === role) {
+				option.selected = true;
+			}
+		});
+	};
+
+	showSelect = (e) => {
+		const selectEl = document.getElementById('roles');
+
+		selectEl.classList.toggle('select-show');
+	};
+
 	render() {
 		const state = this.state;
+		const currentUser = this.props.currentUser;
 		return (
-			<section>
+			<section className='container profile'>
 				<div className='profile-left'>
-					<img src={this.state.img} className='profile-img' alt='' />
-					<form onSubmit={this.handleImgSubmit} encType='multipart/form-data'>
+					<div className='profile-image-container'>
+						<img src={this.state.img} className='profile-img' alt='' />
+						<span onClick={this.toggleForm} className='img-form-toggle'>
+							<i className='fas fa-plus'></i>
+						</span>
+					</div>
+					<form
+						onSubmit={this.handleImgSubmit}
+						encType='multipart/form-data'
+						className='img-form hidden'
+					>
+						<span onClick={this.toggleForm} className='img-form-toggle close'>
+							<i className='fas fa-times'></i>
+						</span>
+						<h2>Update Profile Image</h2>
+						<img
+							src='https://picsum.photos/150'
+							alt='preview'
+							className='preview'
+						/>
+						<label htmlFor='img'>Profile Image</label>
 						<input onChange={this.handleImgChange} type='file' name='img' />
 						<button type='submit'>Update Image</button>
 					</form>
-					<h2>{state.username}</h2>
-					<p>{state.roles ? state.roles : 'No role'}</p>
+					<div className='user-info'>
+						<h2>{state.username}</h2>
+						<p>{state.roles ? state.roles : 'No role'}</p>
+					</div>
 				</div>
 				<div className='profile-right'>
-					<form onSubmit={this.handleSubmit}>
-						<div className='form-group'>
-							<label htmlFor='username'>Username</label>
-							<input
-								type='text'
-								name='username'
-								id='username'
-								value={state.username}
-								onChange={this.handleChange}
-							/>
+					{!currentUser && (
+						<div className='profile-info'>
+							<div className='user-group'>
+								<p>Username</p>
+								<p>{state.username}</p>
+							</div>
+							<div className='user-group'>
+								<p>Roles</p>
+								<p>{state.roles}</p>
+							</div>
+							<div className='user-group'>
+								<p>About</p>
+								<p>{state.bio}</p>
+							</div>
+							<div className='user-group'>
+								<p>Location</p>
+								<p>{state.city}</p>
+							</div>
+							<div className='user-group'>
+								<p>Games</p>
+								{state.games.map((game) => (
+									<p>{game}</p>
+								))}
+							</div>
 						</div>
-						<div className='form-group'>
-							<label htmlFor='roles'>Roles</label>
-							<select name='roles' id='roles' onChange={this.handleChange}>
-								<option value='DM'>DM</option>
-								<option value='Player'>Player</option>
-								<option value='DM/Player'>DM/Player</option>
-							</select>
-						</div>
-						<div className='form-group'>
-							<label htmlFor='bio'>About</label>
-							<input
-								type='text'
-								name='bio'
-								id='bio'
-								value={state.bio}
-								onChange={this.handleChange}
-							/>
-						</div>
-						<div className='form-group'>
-							<label htmlFor='city'>City</label>
-							<p>{state.city}</p>
-							<input type='text' name='city' onChange={this.handleTomTom} />
-							<select
-								onChange={this.handleTomTomChange}
-								id='cities'
-								style={{ display: 'none' }}
-							></select>
-						</div>
-						<div className='form-group checkbox-container'>
+					)}
+					{currentUser && (
+						<form onSubmit={this.handleSubmit} className='profile-info'>
+							<h2>Adventurer Info</h2>
+							<div className='form-group'>
+								<label htmlFor='username'>Username</label>
+								<input
+									readOnly
+									type='text'
+									name='username'
+									id='username'
+									value={state.username}
+									onChange={this.handleChange}
+								/>
+								<span onClick={this.toggleReadOnly} className='toggle-edit'>
+									<i className='fas fa-pencil-alt'></i>
+								</span>
+							</div>
+							<div className='form-group'>
+								<label htmlFor='roles'>Roles</label>
+								<select name='roles' id='roles' onChange={this.handleChange}>
+									<option value='DM'>DM</option>
+									<option value='Player'>Player</option>
+									<option value='DM/Player'>DM/Player</option>
+								</select>
+								<span onClick={this.showSelect} className='toggle-edit'>
+									<i className='fas fa-pencil-alt'></i>
+								</span>
+							</div>
+							<div className='form-group'>
+								<label htmlFor='bio'>About</label>
+								<input
+									readOnly
+									type='text'
+									name='bio'
+									id='bio'
+									value={state.bio}
+									onChange={this.handleChange}
+								/>
+								<span onClick={this.toggleReadOnly} className='toggle-edit'>
+									<i className='fas fa-pencil-alt'></i>
+								</span>
+							</div>
+							<div className='form-group city-group'>
+								<label htmlFor='city'>City</label>
+								{state.city}
+
+								<div className='cities-search'>
+									<input
+										type='text'
+										name='city'
+										id='city'
+										readOnly
+										onChange={this.handleTomTom}
+									/>
+									<select
+										onChange={this.handleTomTomChange}
+										id='cities'
+										style={{ display: 'none' }}
+									></select>
+								</div>
+								<span
+									onClick={this.toggleTomTomReadOnly}
+									className='toggle-edit'
+								>
+									<i className='fas fa-pencil-alt'></i>
+								</span>
+							</div>
 							<label htmlFor='games'>Games</label>
-							<label htmlFor='5e'>D&D5e</label>
-							<input
-								type='checkbox'
-								name='D&D5e'
-								id='5e'
-								value='D&D5e'
-								className='checkbox'
-								onChange={this.handleChange}
-							/>
-							<label htmlFor='PF'>Pathfinder 2e</label>
-							<input
-								type='checkbox'
-								name='PF'
-								id='PF'
-								value='PF'
-								className='checkbox'
-								onChange={this.handleChange}
-							/>
-						</div>
-						<button type='submit'>Update Form</button>
-					</form>
+							<div className='form-group checkbox-container'>
+								<div className='checkbox-label'>
+									<label htmlFor='5e'>D&D5e</label>
+									<input
+										type='checkbox'
+										name='D&D5e'
+										id='5e'
+										value='D&D5e'
+										className='checkbox'
+										onChange={this.handleChange}
+									/>
+									<span className='custom-checkbox'></span>
+								</div>
+								<div className='checkbox-label'>
+									<label htmlFor='PF'>Pathfinder 2e</label>
+									<input
+										type='checkbox'
+										name='PF'
+										id='PF'
+										value='PF'
+										className='checkbox'
+										onChange={this.handleChange}
+									/>
+									<span className='custom-checkbox'></span>
+								</div>
+							</div>
+							<button className='btn' type='submit'>
+								Update Form
+							</button>
+						</form>
+					)}
 				</div>
 			</section>
 		);

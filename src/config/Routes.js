@@ -13,6 +13,11 @@ export default ({ currentUser, setCurrentUser }) => (
 			path='/login'
 			render={() => <Login setCurrentUser={setCurrentUser} />}
 		/>
-		<Route path='/users/:id' component={Profile} />
+		<Route
+			path='/users/:id'
+			render={(matchProps) => (
+				<Profile {...matchProps} currentUser={currentUser} />
+			)}
+		/>
 	</Switch>
 );
