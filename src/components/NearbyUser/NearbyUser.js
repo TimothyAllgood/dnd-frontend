@@ -1,13 +1,21 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+require('./NearbyUser.css');
 
 function NearbyUser({ user }) {
 	return (
-		<div>
+		<div className='nearby-card'>
 			<NavLink to={`/users/${user._id}`}>
-				<img src={user.profileImg} width='200px' alt='' />
-				<p>{user.username}</p>
-				<p>{user.role}</p>
+				<img
+					className='nearby-img'
+					src={user.profileImg}
+					width='200px'
+					alt=''
+				/>
+				<div className='nearby-info'>
+					<h3>{user.username}</h3>
+					<p>{user.roles ? user.roles : 'Undecided'}</p>
+				</div>
 			</NavLink>
 		</div>
 	);

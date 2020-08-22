@@ -1,0 +1,34 @@
+.nearby-container {
+	margin-top: 50px;
+}
+
+.nearby-card {
+	display: flex;
+	justify-content: center;
+	margin: 25px 0;
+	background-color: #fff;
+	border: 1px solid var(--main-color);
+	padding: 50px;
+}
+
+.nearby-card:hover {
+	background-color: rgb(206, 206, 206);
+}
+
+.nearby-card a {
+	color: var(--text);
+}
+
+.nearby-info {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.nearby-img {
+	margin-bottom: 15px;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+}

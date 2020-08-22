@@ -287,127 +287,31 @@ class Profile extends Component {
 					{!state.currentCheck && (
 						<div className='profile-info'>
 							<div className='user-group'>
-								<p>Username</p>
+								<h3>Username</h3>
 								<p>{state.username}</p>
 							</div>
 							<div className='user-group'>
-								<p>Roles</p>
+								<h3>Roles</h3>
 								<p>{state.roles}</p>
 							</div>
-							<div className='user-group'>
-								<p>About</p>
+							<div className='user-group bio'>
+								<h3>About</h3>
 								<p>{state.bio}</p>
 							</div>
-							<div className='user-group'>
-								<p>Location</p>
+							<div className='user-group location'>
+								<h3>Location</h3>
 								<p>{state.city}</p>
 							</div>
-							<div className='user-group'>
-								<p>Games</p>
+							<div
+								className='user-group
+							games'
+							>
+								<h3>Games</h3>
 								{state.games.map((game) => (
 									<p key={game}>{game}</p>
 								))}
 							</div>
 						</div>
-					)}
-					{state.currentCheck && (
-						<form onSubmit={this.handleSubmit} className='profile-info'>
-							<h2>Adventurer Info</h2>
-							<div className='form-group'>
-								<label htmlFor='username'>Username</label>
-								<input
-									readOnly
-									type='text'
-									name='username'
-									id='username'
-									value={state.username}
-									onChange={this.handleChange}
-								/>
-								<span onClick={this.toggleReadOnly} className='toggle-edit'>
-									<i className='fas fa-pencil-alt'></i>
-								</span>
-							</div>
-							<div className='form-group'>
-								<label htmlFor='roles'>Roles</label>
-								<select name='roles' id='roles' onChange={this.handleChange}>
-									<option value='DM'>DM</option>
-									<option value='Player'>Player</option>
-									<option value='DM/Player'>DM/Player</option>
-								</select>
-								<span onClick={this.showSelect} className='toggle-edit'>
-									<i className='fas fa-pencil-alt'></i>
-								</span>
-							</div>
-							<div className='form-group'>
-								<label htmlFor='bio'>About</label>
-								<input
-									readOnly
-									type='text'
-									name='bio'
-									id='bio'
-									value={state.bio}
-									onChange={this.handleChange}
-								/>
-								<span onClick={this.toggleReadOnly} className='toggle-edit'>
-									<i className='fas fa-pencil-alt'></i>
-								</span>
-							</div>
-							<div className='form-group city-group'>
-								<label htmlFor='city'>City</label>
-								{state.city}
-
-								<div className='cities-search'>
-									<input
-										type='text'
-										name='city'
-										id='city'
-										readOnly
-										onChange={this.handleTomTom}
-									/>
-									<select
-										onChange={this.handleTomTomChange}
-										id='cities'
-										style={{ display: 'none' }}
-									></select>
-								</div>
-								<span
-									onClick={this.toggleTomTomReadOnly}
-									className='toggle-edit'
-								>
-									<i className='fas fa-pencil-alt'></i>
-								</span>
-							</div>
-							<label htmlFor='games'>Games</label>
-							<div className='form-group checkbox-container'>
-								<div className='checkbox-label'>
-									<label htmlFor='5e'>D&D5e</label>
-									<input
-										type='checkbox'
-										name='D&D5e'
-										id='5e'
-										value='D&D5e'
-										className='checkbox'
-										onChange={this.handleChange}
-									/>
-									<span className='custom-checkbox'></span>
-								</div>
-								<div className='checkbox-label'>
-									<label htmlFor='PF'>Pathfinder 2e</label>
-									<input
-										type='checkbox'
-										name='PF'
-										id='PF'
-										value='PF'
-										className='checkbox'
-										onChange={this.handleChange}
-									/>
-									<span className='custom-checkbox'></span>
-								</div>
-							</div>
-							<button className='btn' type='submit'>
-								Update Form
-							</button>
-						</form>
 					)}
 				</div>
 			</section>

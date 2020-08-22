@@ -21,7 +21,9 @@ class NearbyContainer extends Component {
 				return <NearbyUser key={nearbyUser._id} user={nearbyUser} />;
 			});
 		}
-		return <div>{nearbyUsers}</div>;
+		return (
+			<section className='nearby-container container'>{nearbyUsers}</section>
+		);
 	}
 }
 

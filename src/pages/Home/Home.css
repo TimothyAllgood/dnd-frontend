@@ -17,7 +17,7 @@
 
 .cta h2 {
 	font-size: 2em;
-	margin-bottom: 1%;
+	margin-bottom: 5%;
 }
 
 .cta .btn a {
@@ -31,6 +31,6 @@
 
 .cards-container {
 	display: flex;
-	justify-content: space-around;
+	flex-direction: column;
 	margin: 40px auto;
 }

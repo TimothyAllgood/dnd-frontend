@@ -1,7 +1,5 @@
 .profile {
 	margin-top: 100px;
-	display: flex;
-	justify-content: space-evenly;
 }
 
 .img-form {
@@ -35,7 +33,7 @@
 }
 
 .img-form-toggle {
-	background-color: var(--main-color);
+	background-color: var(--accent);
 	padding: 5px 7.5px;
 	border-radius: 50%;
 	-webkit-border-radius: 50%;
@@ -44,12 +42,15 @@
 	-o-border-radius: 50%;
 }
 
+.img-form-toggle:hover {
+	cursor: pointer;
+}
+
 .img-form-toggle i {
 	color: #fff !important;
 }
 
 .user-info {
-	width: 300px;
 	text-align: center;
 }
 
@@ -203,4 +204,22 @@ select {
 .hidden {
 	opacity: 0;
 	z-index: -999;
+}
+
+.profile-info {
+	display: grid;
+	justify-content: center;
+	align-items: center;
+	grid-template-columns: 1fr 1fr;
+	margin-top: 25px;
+}
+
+.profile-info .bio,
+.location,
+.games {
+	grid-column: 1/2;
+}
+
+.profile-left {
+	text-align: center;
 }
