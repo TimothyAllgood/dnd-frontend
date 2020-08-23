@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import User from '../../models/User';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
+
 require('./Profile.css');
 
 class Profile extends Component {
@@ -309,6 +311,9 @@ class Profile extends Component {
 									<p key={game}>{game}</p>
 								))}
 							</div>
+							<NavLink to={`/conversations/${this.props.match.params.id}`}>
+								Message
+							</NavLink>
 						</div>
 					)}
 				</div>

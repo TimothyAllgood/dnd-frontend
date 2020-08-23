@@ -6,6 +6,7 @@ import Login from '../components/Login/Login';
 import Profile from '../pages/Profile/Profile';
 import NearbyContainer from '../pages/NearbyContainer/NearbyContainer';
 import UserProfile from '../pages/Profile/UserProfile';
+import MessageContainer from '../pages/MessagesContainer/MessagesContainer';
 
 export default ({ currentUser, setCurrentUser }) => (
 	<Switch>
@@ -31,6 +32,12 @@ export default ({ currentUser, setCurrentUser }) => (
 			path='/nearby/:id'
 			render={(matchProps) => (
 				<NearbyContainer {...matchProps} currentUser={currentUser} />
+			)}
+		/>
+		<Route
+			path='/conversations/:id'
+			render={(matchProps) => (
+				<MessageContainer {...matchProps} currentUser={currentUser} />
 			)}
 		/>
 	</Switch>

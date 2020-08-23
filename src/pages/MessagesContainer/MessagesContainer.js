@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
-import User from './models/User';
+import User from '../../models/User';
 const ENDPOINT = 'http://localhost:4000';
 
-class Test extends React.Component {
+class MessageContainer extends React.Component {
 	state = {
 		from: '',
 		to: '',
@@ -15,24 +15,29 @@ class Test extends React.Component {
 	socket = socketIOClient(ENDPOINT);
 
 	async componentDidMount() {
-		const user = await User.get('5f402032bd4c4db1367ac630');
+		const currentUser = this.props.currentUser;
+		const user = await User.get(currentUser);
 		this.setState({
 			username: user.data.foundUser.username,
 			from: user.data.foundUser._id,
+			to: this.props.match.params.id,
 		});
 		const addMessage = (data) => {
-			console.log(data);
 			this.setState({ messages: [...this.state.messages, data] });
-			console.log(this.state.messages);
 		};
+		const from = this.state.from;
+		const to = this.state.to;
 		this.socket.on('RECEIVE_MESSAGE', function (data) {
-			addMessage(data);
+			if (data.from === from || data.to || to) {
+				addMessage(data);
+			}
 		});
 	}
 	sendMessage = (ev) => {
 		ev.preventDefault();
 		this.socket.emit('SEND_MESSAGE', {
-			author: this.state.username,
+			from: this.state.from,
+			to: this.state.to,
 			message: this.state.message,
 		});
 	};
@@ -50,7 +55,7 @@ class Test extends React.Component {
 									{this.state.messages.map((message) => {
 										return (
 											<div>
-												{message.author}: {message.message}
+												{message.from}: {message.message}
 											</div>
 										);
 									})}
@@ -90,4 +95,4 @@ class Test extends React.Component {
 	}
 }
 
-export default Test;
+export default MessageContainer;

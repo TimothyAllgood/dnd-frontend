@@ -5,7 +5,6 @@ import Routes from './config/Routes';
 import jwt_decode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
 import setAuthHeader from './util/setAuthHeader';
-import Test from './Test';
 
 class App extends React.Component {
 	state = {
@@ -65,7 +64,6 @@ class App extends React.Component {
 					currentUser={this.state.currentUser}
 					setCurrentUser={this.setCurrentUser}
 				/>
-				<Test></Test>
 			</main>
 		);
 	}
