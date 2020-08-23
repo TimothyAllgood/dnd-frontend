@@ -3,6 +3,7 @@ import User from '../../models/User';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 require('./Profile.css');
+require('./User.css');
 
 class Profile extends Component {
 	state = {

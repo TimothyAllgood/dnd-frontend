@@ -1,0 +1,32 @@
+.profile-info {
+	display: flex;
+	flex-direction: column;
+
+	margin-top: 25px;
+}
+
+.profile-info .bio,
+.location,
+.games {
+	grid-column: initial;
+}
+
+.profile-left {
+	text-align: initial;
+}
+
+.form-group select {
+	width: 274px;
+}
+
+.profile .btn {
+	padding: 10px;
+	margin-bottom: 25px;
+	background-color: var(--main-color);
+	color: #fff;
+	border: none;
+}
+
+.profile .btn:hover {
+	background-color: var(--main-hover);
+}

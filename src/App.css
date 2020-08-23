@@ -47,3 +47,19 @@ h4 {
 .adventurer {
 	color: rgb(235, 78, 78);
 }
+
+/* Media Queries */
+
+@media screen and (min-width: 400px) {
+	.profile-right {
+		display: flex;
+		justify-content: center;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.profile-right {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+}

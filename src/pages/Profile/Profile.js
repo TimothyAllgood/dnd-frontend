@@ -62,8 +62,6 @@ class Profile extends Component {
 
 				navigator.geolocation.getCurrentPosition(success, error, options);
 			}
-			this.setCheckbox(this.state.games);
-			this.handleSelect(this.state.roles);
 		}
 
 		for (let user of this.state.currentUser) {
