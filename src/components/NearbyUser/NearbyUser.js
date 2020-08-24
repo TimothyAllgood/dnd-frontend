@@ -1,5 +1,6 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
+
 require('./NearbyUser.css');
 
 function NearbyUser({ user }) {
@@ -21,4 +22,4 @@ function NearbyUser({ user }) {
 	);
 }
 
-export default NearbyUser;
+export default withRouter(NearbyUser);

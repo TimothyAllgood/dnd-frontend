@@ -23,7 +23,7 @@ export class Login extends Component {
 			this.props.setCurrentUser(res.data.token);
 
 			console.log(res);
-			this.props.history.push(`/users/${res.data.id}`);
+			this.props.history.push(`/profile/${res.data.id}`);
 		} catch (error) {
 			console.log(error);
 		}

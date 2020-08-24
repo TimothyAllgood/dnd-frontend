@@ -1,25 +1,27 @@
 .form-container {
 	display: flex;
-	width: 60vw;
+	width: 80vw;
 	height: calc(100vh - 75px);
 	position: relative;
 	justify-content: center;
 	align-items: center;
+	position: relative;
 }
 
 .form-image {
-	width: 40%;
-	height: 60%;
+	width: 100vw;
+	height: 100vh;
 	background-image: url('./form-image.jpg');
 	background-position: center center;
 	background-size: cover;
-	margin-right: 50px;
+	position: absolute;
+	z-index: -178;
 }
 
 .form-container form {
 	background-color: #fff;
-	width: 50%;
-	height: 50%;
+	padding: 35px;
+	width: 90%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

@@ -59,6 +59,15 @@ class Navbar extends React.Component {
 										</NavLink>
 									</li>
 									<li className='nav-item'>
+										<NavLink
+											onClick={this.toggleMenu}
+											className='nav-link'
+											to={`/messages/${currentUser}`}
+										>
+											Messages
+										</NavLink>
+									</li>
+									<li className='nav-item'>
 										<span onClick={this.logout} className='nav-link'>
 											Logout
 										</span>

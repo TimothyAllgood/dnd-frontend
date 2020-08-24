@@ -32,7 +32,12 @@
 	-o-border-radius: 50%;
 }
 
-.img-form-toggle {
+.profile-image-container {
+	width: 100%;
+	text-align: center;
+}
+
+.profile .img-form-toggle {
 	background-color: var(--accent);
 	padding: 5px 7.5px;
 	border-radius: 50%;
@@ -167,6 +172,7 @@ input[type='text'] {
 }
 
 input:read-only {
+	background-color: #f1f1f1;
 	border-color: transparent;
 }
 
@@ -188,6 +194,10 @@ select {
 
 #roles {
 	border-color: transparent;
+	background-color: #f1f1f1;
+}
+
+#roles:focus {
 	background-color: #fff;
 }
 
@@ -208,8 +218,6 @@ select {
 
 .profile-info {
 	display: grid;
-	justify-content: center;
-	align-items: center;
 	grid-template-columns: 1fr 1fr;
 	margin-top: 25px;
 }
