@@ -25,7 +25,7 @@ function ConversationContainer(props) {
 
 	async function setConvo(id) {
 		const conversation = await Conversation.getOneByID(id);
-		const almostTo = conversation.data.foundConversation.participants.map(
+		const almostTo = conversation.data.foundConversation.participants.ids.map(
 			(participant, key) => {
 				if (participant !== props.currentUser && key !== '_id') {
 					console.log(participant);
@@ -61,7 +61,7 @@ function ConversationContainer(props) {
 		conversationsEL = conversations.map((conversation) => {
 			return (
 				<p onClick={() => setConvo(conversation._id)}>
-					{conversation.participants[0]}
+					{conversation.participants.users.userTwo.username}
 				</p>
 			);
 		});
