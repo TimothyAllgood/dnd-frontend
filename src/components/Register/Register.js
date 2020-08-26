@@ -8,6 +8,7 @@ export class Register extends Component {
 		username: '',
 		email: '',
 		password: '',
+		errMsg: '',
 	};
 
 	handleChange = (e) => {
@@ -17,10 +18,17 @@ export class Register extends Component {
 	handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const res = await User.register(this.state);
+			let registerData = {
+				username: this.state.username,
+				email: this.state.email,
+				password: this.state.password,
+			};
+			const res = await User.register(registerData);
 			console.log(res);
 			this.props.history.push('/login');
 		} catch (error) {
+			console.log(error.response.data.message);
+			this.setState({ errMsg: error.response.data.message });
 			console.log(error);
 		}
 	};
@@ -70,6 +78,9 @@ export class Register extends Component {
 					<button className='btn btn-primary' type='submit'>
 						Sign Up
 					</button>
+					<div id='error' className={this.state.errMsg && 'show'}>
+						{this.state.errMsg}
+					</div>
 				</form>
 			</section>
 		);

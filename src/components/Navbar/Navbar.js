@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+
 import './Navbar.css';
 
 class Navbar extends React.Component {
@@ -47,6 +48,15 @@ class Navbar extends React.Component {
 											to={`/profile/${currentUser}`}
 										>
 											View Profile
+										</NavLink>
+									</li>
+									<li className='nav-item'>
+										<NavLink
+											onClick={this.toggleMenu}
+											className='nav-link'
+											to={`/friends`}
+										>
+											Friends
 										</NavLink>
 									</li>
 									<li className='nav-item'>

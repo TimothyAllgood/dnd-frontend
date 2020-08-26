@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'https://shrouded-castle-10865.herokuapp.com/api';
 
 export default class Conversation {
 	static get = async (userOne, userTwo) => {
@@ -18,7 +18,6 @@ export default class Conversation {
 	};
 
 	static addMessage = async (userOne, userTwo, messageContent) => {
-		console.log(messageContent);
 		return axios.post(
 			`${BASE_URL}/v1/messages/conversation/${userOne}/${userTwo}`,
 			messageContent

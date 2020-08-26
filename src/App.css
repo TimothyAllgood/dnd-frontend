@@ -4,6 +4,7 @@
 	--text: #333;
 	--white: #f1f1f1;
 	--accent: #f95b51;
+	--accent-hover: #ac3d35;
 }
 
 * {
@@ -42,10 +43,6 @@ h4 {
 .container {
 	width: 90vw;
 	margin: 0 auto;
-}
-
-.adventurer {
-	color: rgb(235, 78, 78);
 }
 
 /* Media Queries */

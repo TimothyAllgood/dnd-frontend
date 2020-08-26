@@ -92,13 +92,27 @@ class Profile extends Component {
 	setCheckbox = (games) => {
 		// console.log('hello');
 		const checkboxes = document.querySelectorAll('.checkbox');
-		for (let i = 0; i < games.length; i++) {
-			if (checkboxes[i].value === games[i]) {
-				checkboxes[i].checked = 'true';
-			} else {
-				checkboxes[i].checked = 'false';
-			}
-		}
+		checkboxes.forEach((checkbox) => {
+			console.log(checkbox.value);
+			games.forEach((game) => {
+				if (checkbox.value === game) {
+					checkbox.checked = 'true';
+				}
+			});
+		});
+		// for (let i = 0; i < checkboxes.length; i++) {
+		// 	for (let j = 0; j < games.length; j++) {
+		// 		console.log(checkboxes[j]);
+
+		// 		console.log(games[j]);
+		// 		console.log(checkboxes[i].value === games[j]);
+		// 		if (checkboxes[i].value === games[j]) {
+		// 			checkboxes[i].checked = 'true';
+		// 		} else {
+		// 			checkboxes[i].checked = 'false';
+		// 		}
+		// 	}
+		// }
 	};
 
 	handleChange = (e) => {
@@ -184,10 +198,10 @@ class Profile extends Component {
 	};
 
 	toggleReadOnly = (e) => {
+		console.log(e.target.parentElement.parentElement);
 		const parent = e.target.parentElement.parentElement;
 		const inputEl = parent.querySelector('input');
 		const i = parent.querySelector('i');
-		console.log(inputEl.id);
 		if (inputEl.readOnly) {
 			inputEl.readOnly = false;
 			i.classList.remove('fa-pencil-alt');
@@ -212,12 +226,14 @@ class Profile extends Component {
 
 			document.querySelector('.cities-search').style.opacity = '1';
 			parent.querySelector('#cities').style.display = 'initial';
+			parent.querySelector('#cities').classList.add('city-select-show');
 		} else {
 			inputEl.readOnly = true;
 			i.classList.add('fa-pencil-alt');
 			i.classList.remove('fa-times');
 
 			parent.querySelector('#cities').style.display = 'none';
+			parent.querySelector('#cities').classList.remove('city-select-show');
 			document.querySelector('.cities-search').style.opacity = '0';
 		}
 	};
@@ -276,9 +292,20 @@ class Profile extends Component {
 							alt='preview'
 							className='preview'
 						/>
-						<label htmlFor='img'>Profile Image</label>
-						<input onChange={this.handleImgChange} type='file' name='img' />
-						<button type='submit'>Update Image</button>
+						<input
+							onChange={this.handleImgChange}
+							type='file'
+							name='img'
+							id='img'
+						/>
+
+						<label className='custom-label' for='img'>
+							<i className='fas fa-upload'></i>
+							Choose an image
+						</label>
+						<button className='img-btn' type='submit'>
+							Update Image
+						</button>
 					</form>
 					<div className='user-info'>
 						<h2>{state.username}</h2>
@@ -316,10 +343,12 @@ class Profile extends Component {
 						</div>
 					)}
 					{state.currentCheck && (
-						<form onSubmit={this.handleSubmit} className='profile-info'>
+						<form onSubmit={this.handleSubmit} className='profile-form'>
 							<h2>Adventurer Info</h2>
-							<div className='form-group'>
-								<label htmlFor='username'>Username</label>
+							<div className='form-group username-form'>
+								<label htmlFor='username'>
+									<h3>Username</h3>
+								</label>
 								<input
 									readOnly
 									type='text'
@@ -332,8 +361,10 @@ class Profile extends Component {
 									<i className='fas fa-pencil-alt'></i>
 								</span>
 							</div>
-							<div className='form-group'>
-								<label htmlFor='roles'>Roles</label>
+							<div className='form-group roles-form'>
+								<label htmlFor='roles'>
+									<h3>Roles</h3>
+								</label>
 								<select name='roles' id='roles' onChange={this.handleChange}>
 									<option value='DM'>DM</option>
 									<option value='Player'>Player</option>
@@ -343,8 +374,10 @@ class Profile extends Component {
 									<i className='fas fa-pencil-alt'></i>
 								</span>
 							</div>
-							<div className='form-group'>
-								<label htmlFor='bio'>About</label>
+							<div className='form-group bio-form'>
+								<label htmlFor='bio'>
+									<h3>About</h3>
+								</label>
 								<input
 									readOnly
 									type='text'
@@ -358,7 +391,9 @@ class Profile extends Component {
 								</span>
 							</div>
 							<div className='form-group city-group'>
-								<label htmlFor='city'>City</label>
+								<label htmlFor='city'>
+									<h3>Location</h3>
+								</label>
 								{state.city}
 
 								<div className='cities-search'>
@@ -382,7 +417,9 @@ class Profile extends Component {
 									<i className='fas fa-pencil-alt'></i>
 								</span>
 							</div>
-							<label htmlFor='games'>Games</label>
+							<label htmlFor='games' className='games-form'>
+								<h3>Games</h3>
+							</label>
 							<div className='form-group checkbox-container'>
 								<div className='checkbox-label'>
 									<label htmlFor='5e'>D&D5e</label>
@@ -397,12 +434,50 @@ class Profile extends Component {
 									<span className='custom-checkbox'></span>
 								</div>
 								<div className='checkbox-label'>
+									<label htmlFor='PF'>Pathfinder 1e</label>
+									<input
+										type='checkbox'
+										name='PF1e'
+										id='PF1e'
+										value='PF1e'
+										className='checkbox'
+										onChange={this.handleChange}
+									/>
+									<span className='custom-checkbox'></span>
+								</div>
+								<div className='checkbox-label'>
 									<label htmlFor='PF'>Pathfinder 2e</label>
 									<input
 										type='checkbox'
-										name='PF'
-										id='PF'
-										value='PF'
+										name='PF2e'
+										id='PF2e'
+										value='PF2e'
+										className='checkbox'
+										onChange={this.handleChange}
+									/>
+									<span className='custom-checkbox'></span>
+								</div>
+							</div>
+							<div className='form-group checkbox-container-two'>
+								<div className='checkbox-label'>
+									<label htmlFor='5e'>Call of Cthulhu 7E</label>
+									<input
+										type='checkbox'
+										name='CoC7e'
+										id='CoC7e'
+										value='CoC7e'
+										className='checkbox'
+										onChange={this.handleChange}
+									/>
+									<span className='custom-checkbox'></span>
+								</div>
+								<div className='checkbox-label'>
+									<label htmlFor='PF'>Starfinder 1e</label>
+									<input
+										type='checkbox'
+										name='SF1e'
+										id='SF1e'
+										value='SF1e'
 										className='checkbox'
 										onChange={this.handleChange}
 									/>

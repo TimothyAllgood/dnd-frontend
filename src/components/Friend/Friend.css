@@ -1,8 +1,8 @@
-.nearby-container {
+.friends-container {
 	margin-top: 50px;
 }
 
-.nearby-card {
+.friend-card {
 	display: flex;
 	justify-content: center;
 	margin: 25px 0;
@@ -11,20 +11,20 @@
 	padding: 50px;
 }
 
-.nearby-card:hover {
+.friend-card:hover {
 	background-color: rgb(206, 206, 206);
 }
 
-.nearby-card a {
+.friend-card a {
 	color: var(--text);
 }
 
-.nearby-info {
+.friend-info {
 	display: flex;
 	justify-content: space-evenly;
 }
 
-.nearby-img {
+.friend-img {
 	margin-bottom: 15px;
 	border-radius: 50%;
 	-webkit-border-radius: 50%;
@@ -34,12 +34,12 @@
 }
 
 @media screen and (min-width: 768px) {
-	.nearby-container {
+	.friends-container {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
 	}
 
-	.nearby-card {
-		margin: 0 10px;
+	.friend-card {
+		margin: 10px 10px;
 	}
 }

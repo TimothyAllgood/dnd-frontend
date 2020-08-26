@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'https://shrouded-castle-10865.herokuapp.com/api';
 
 export default class User {
 	static register = async (user) => {

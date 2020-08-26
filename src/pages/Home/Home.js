@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Card from '../../components/Card/Card';
 require('./Home.css');
 
 function Home() {
+	// const rotateText = () => {
+	// 	const words = ['heroes', 'heroines'];
+	// 	const adventurer = document.querySelector('.adventurer');
+	// 	let timerId = setInterval(changeWord(words, adventurer), 1000);
+	// };
+
+	// const changeWord = (arr, el) => {
+	// 	console.log('called');
+
+	// 	arr.forEach((word) => {
+	// 		console.log(el);
+	// 		el.innerText = word;
+	// 	});
+	// };
+	// useEffect(() => {
+	// 	rotateText();
+	// });
+
 	return (
 		<section className='home'>
 			<div className='splash'>
 				<div className='cta'>
 					<h2>
-						Join <span className='adventurer'>adventurers</span> in your area
-						today
+						Join <span className='adventurer'></span> in your area today
 					</h2>
 					<h3 className='btn'>
-						<NavLink to='/'>Sign Up</NavLink>
+						<NavLink to='/register'>Sign Up Today!</NavLink>
 					</h3>
 				</div>
 			</div>

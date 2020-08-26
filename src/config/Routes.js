@@ -7,6 +7,7 @@ import Profile from '../pages/Profile/Profile';
 import NearbyContainer from '../pages/NearbyContainer/NearbyContainer';
 import UserProfile from '../pages/Profile/UserProfile';
 import ConversationContainer from '../pages/ConversationContainer/ConversationContainer';
+import FriendsContainer from '../pages/FriendsContainer/FriendsContainer';
 
 export default ({ currentUser, setCurrentUser }) => (
 	<Switch>
@@ -38,6 +39,13 @@ export default ({ currentUser, setCurrentUser }) => (
 			path='/messages/:user'
 			render={(matchProps) => (
 				<ConversationContainer {...matchProps} currentUser={currentUser} />
+			)}
+		/>
+
+		<Route
+			path='/friends'
+			render={(matchProps) => (
+				<FriendsContainer {...matchProps} currentUser={currentUser} />
 			)}
 		/>
 	</Switch>

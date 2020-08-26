@@ -3,7 +3,7 @@ import Conversation from '../../models/Conversation';
 import { withRouter } from 'react-router-dom';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:4000/');
+const socket = io('https://shrouded-castle-10865.herokuapp.com/');
 require('./Messages.css');
 
 function ConversationContainer(props) {
@@ -14,37 +14,43 @@ function ConversationContainer(props) {
 	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
+		let mounted = true;
+
 		async function fetch() {
 			const foundConversations = await Conversation.getAll(props.currentUser);
 			setConversations(foundConversations.data.foundConversations);
-			if (!currentConversation) {
-				setConversation(foundConversations.data.foundConversations[0]);
-			}
-			return foundConversations;
 		}
-		return () => {
+		if (mounted) {
 			fetch();
-		};
+		}
+		return () => (mounted = false);
 	});
 
 	useEffect(() => {
-		console.log(participant);
 		socket.on('RECEIVE_MESSAGE', async (data) => {
 			const messagesEl = document.querySelector('.messages');
-			console.log(messagesEl.clientHeight);
 			messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
-			if (participant.from && participant.to) {
-				if (participant.to === data.to || participant.from === data.to) {
-					setMessages((oldArray) => [...oldArray, data]);
-				}
-			}
+			data.sent = new Date();
+			addMessage(data);
 		});
-	}, [participant]);
+
+		socket.on('RECEIVE_MESSAGE_FROM', async (data) => {
+			const messagesEl = document.querySelector('.messages');
+			messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
+			data.sent = new Date();
+			addMessage(data);
+		});
+	}, []);
 
 	async function setConvo(e, id) {
 		const menuItems = document.querySelectorAll('.convo-menu-item');
 		menuItems.forEach((menuItem) => menuItem.classList.remove('active-convo'));
-		e.target.classList.add('active-convo');
+		if (e.target.classList.contains('convo-menu-item')) {
+			e.target.classList.add('active-convo');
+		} else {
+			e.target.parentElement.classList.add('active-convo');
+		}
+
 		setMessages([]);
 		setParticipant({});
 		const conversation = await Conversation.getOneByID(id);
@@ -91,16 +97,22 @@ function ConversationContainer(props) {
 	// let messages;
 	if ({ conversations }) {
 		conversationsEL = conversations.map((conversation) => {
+			let userInfo;
+			const users = Object.entries(conversation.participants.users);
+			users.map((fuser) => {
+				if (props.currentUser !== fuser[1]._id) {
+					userInfo = fuser[1];
+				}
+			});
 			return (
-				<>
-					<h3
-						onClick={(e) => setConvo(e, conversation._id)}
-						className='convo-menu-item'
-					>
-						{conversation.participants.users.userOne.username}/
-						{conversation.participants.users.userTwo.username}
-					</h3>
-				</>
+				<div
+					onClick={(e) => setConvo(e, conversation._id)}
+					className='convo-menu-item'
+					key={conversation._id}
+				>
+					<img className='user-img' src={userInfo.profileImg} alt='' />
+					<h3>{userInfo.username}</h3>
+				</div>
 			);
 		});
 	}
@@ -139,8 +151,14 @@ function ConversationContainer(props) {
 							}
 						});
 						return (
-							<div className={you === username ? 'float-right' : 'float-left'}>
-								<h4>{username}</h4>
+							<div
+								key={newMessage._id}
+								className={you === username ? 'float-right' : 'float-left'}
+							>
+								<h4>
+									{username}:{' '}
+									{new Date(Date.parse(newMessage.sent)).toLocaleDateString()}
+								</h4>
 								<p>{newMessage.message}</p>
 							</div>
 						);
@@ -157,7 +175,7 @@ function ConversationContainer(props) {
 						/>
 						<br />
 						<button type='submit'>
-							<i class='fas fa-paper-plane'></i>
+							<i className='fas fa-paper-plane'></i>
 						</button>
 					</form>
 				)}

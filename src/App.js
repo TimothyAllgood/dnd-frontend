@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import setAuthHeader from './util/setAuthHeader';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:4000/');
+const socket = io('https://shrouded-castle-10865.herokuapp.com/');
 
 class App extends React.Component {
 	state = {
