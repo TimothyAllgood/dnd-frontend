@@ -5,11 +5,15 @@ import Routes from './config/Routes';
 import jwt_decode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
 import setAuthHeader from './util/setAuthHeader';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:4000/');
 
 class App extends React.Component {
 	state = {
 		currentUser: '',
 		currentUsername: '',
+		socket: '',
 	};
 
 	componentDidMount() {
@@ -20,9 +24,25 @@ class App extends React.Component {
 			// Decode Token
 			const decodedToken = jwt_decode(token);
 			// Set State
+
 			this.setState({
 				currentUser: decodedToken.id,
 				currentUsername: decodedToken.user,
+			});
+
+			console.log(socket.id); // undefined
+
+			socket.on('connect', () => {
+				this.setState({ socket: socket.id });
+				socket.emit('fromClient', {
+					user: this.state.currentUser,
+					socket: this.state.socket,
+				});
+				console.log(socket.id); // 'G5p5...'
+			});
+
+			socket.on('hello', (data) => {
+				console.log(data);
 			});
 		}
 	}

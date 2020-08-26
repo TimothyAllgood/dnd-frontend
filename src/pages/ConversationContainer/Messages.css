@@ -1,0 +1,89 @@
+.convo-container {
+	display: flex;
+	height: calc(100vh - 54px);
+	max-height: calc(100vh - 54px);
+}
+
+.convo-menu {
+	background-color: var(--main-hover);
+	overflow-x: scroll;
+	width: 40vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #f1f1f1;
+	height: calc(100vh - 54px);
+	max-height: calc(100vh - 54px);
+}
+
+.convo-menu-item {
+	width: 100%;
+	height: 20vh;
+	margin: 10px 0;
+}
+
+.active-convo {
+	background-color: var(--main-color);
+}
+
+.convo-menu-item:hover {
+	background-color: var(--main-color);
+}
+
+.convo-title {
+	width: 100%;
+	padding: 10px 0;
+	background-color: var(--accent);
+	color: #f1f1f1;
+}
+
+.convo-title {
+	padding-left: 15px;
+}
+
+.convo {
+	height: calc(100vh - 54px);
+	max-height: calc(100vh - 54px);
+	width: 60vw;
+	position: relative;
+}
+
+.messages {
+	padding: 0 15px;
+	display: flex;
+	flex-direction: column;
+	height: 80vh;
+	max-height: 80vh;
+	overflow-x: scroll;
+}
+
+.float-right {
+	align-self: flex-end;
+}
+
+.float-left {
+	align-self: flex-start;
+}
+
+.message-form {
+	width: 100%;
+	display: flex;
+	position: sticky;
+	bottom: 0;
+}
+
+.message-form input {
+	padding: 10px 0;
+	margin: 0 auto;
+}
+
+.message-form button {
+	width: 100%;
+	color: #f1f1f1;
+	border: none;
+	background-color: var(--accent);
+}
+
+.message-form button:hover {
+	background-color: var(--main-hover);
+}

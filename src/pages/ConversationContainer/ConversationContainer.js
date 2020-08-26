@@ -1,7 +1,9 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Conversation from '../../models/Conversation';
 import { withRouter } from 'react-router-dom';
-import User from '../../models/User';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:4000/');
 require('./Messages.css');
 
 function ConversationContainer(props) {
@@ -9,26 +11,46 @@ function ConversationContainer(props) {
 	const [currentConversation, setConversation] = useState({});
 	const [message, setMessage] = useState('');
 	const [participant, setParticipant] = useState({});
+	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
 		async function fetch() {
 			const foundConversations = await Conversation.getAll(props.currentUser);
 			setConversations(foundConversations.data.foundConversations);
-
 			if (!currentConversation) {
 				setConversation(foundConversations.data.foundConversations[0]);
 			}
+			return foundConversations;
 		}
-
-		fetch();
+		return () => {
+			fetch();
+		};
 	});
 
-	async function setConvo(id) {
+	useEffect(() => {
+		console.log(participant);
+		socket.on('RECEIVE_MESSAGE', async (data) => {
+			const messagesEl = document.querySelector('.messages');
+			console.log(messagesEl.clientHeight);
+			messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
+			if (participant.from && participant.to) {
+				if (participant.to === data.to || participant.from === data.to) {
+					setMessages((oldArray) => [...oldArray, data]);
+				}
+			}
+		});
+	}, [participant]);
+
+	async function setConvo(e, id) {
+		const menuItems = document.querySelectorAll('.convo-menu-item');
+		menuItems.forEach((menuItem) => menuItem.classList.remove('active-convo'));
+		e.target.classList.add('active-convo');
+		setMessages([]);
+		setParticipant({});
 		const conversation = await Conversation.getOneByID(id);
 		const almostTo = conversation.data.foundConversation.participants.ids.map(
 			(participant, key) => {
 				if (participant !== props.currentUser && key !== '_id') {
-					console.log(participant);
 					return participant;
 				}
 			}
@@ -38,51 +60,107 @@ function ConversationContainer(props) {
 
 		setParticipant({ from: props.currentUser, to: to[0] });
 		setConversation(conversation.data.foundConversation);
-	}
-
-	async function fetchUsername(id) {
-		const user = await User.get(id);
-		return user;
+		conversation.data.foundConversation.messages.map((message) => {
+			setMessages((oldArray) => [...oldArray, message]);
+		});
 	}
 
 	function handleChange(e) {
 		e.preventDefault();
 		setMessage(e.target.value);
 	}
+	const sendMessage = (ev) => {
+		socket.emit('SEND_MESSAGE', {
+			to: participant.to,
+			from: participant.from,
+			message: message,
+		});
+	};
 	function handleSubmit(e) {
 		e.preventDefault();
+		sendMessage();
 		const messageContent = { message: message };
 		Conversation.addMessage(participant.from, participant.to, messageContent);
 	}
 
+	const addMessage = (data) => {
+		setMessages((oldArray) => [...oldArray, data]);
+	};
+
 	let conversationsEL;
-	let messages;
+	// let messages;
 	if ({ conversations }) {
 		conversationsEL = conversations.map((conversation) => {
 			return (
-				<p onClick={() => setConvo(conversation._id)}>
-					{conversation.participants.users.userTwo.username}
-				</p>
+				<>
+					<h3
+						onClick={(e) => setConvo(e, conversation._id)}
+						className='convo-menu-item'
+					>
+						{conversation.participants.users.userOne.username}/
+						{conversation.participants.users.userTwo.username}
+					</h3>
+				</>
 			);
 		});
 	}
-	if (currentConversation.messages) {
-		messages = currentConversation.messages.map((message) => {
-			return <p>{message.message}</p>;
+
+	let title;
+	if (currentConversation.participants) {
+		const users = Object.entries(currentConversation.participants.users);
+		users.map((fuser) => {
+			if (props.currentUser !== fuser[1]._id) {
+				title = fuser[1].username;
+			}
 		});
 	}
+
 	return (
-		<div>
-			<div className='conversations-menu'>Conversations: {conversationsEL}</div>
-			<div className='conversation-container'>
-				Messages: {messages}
-				<form onSubmit={handleSubmit}>
-					<div className='message'>
-						<label htmlFor='message'>Message</label>
-						<input onChange={handleChange} type='text' name='message' />
-						<button type='submit'>Send Message</button>
-					</div>
-				</form>
+		<div className='convo-container'>
+			<div className='convo-menu'>{conversationsEL}</div>
+
+			<div className='convo'>
+				<div className='convo-title'>
+					<h3>{title ? title : 'Chat'}</h3>
+				</div>
+				<div className='messages'>
+					{messages.map((newMessage) => {
+						const users = Object.entries(
+							currentConversation.participants.users
+						);
+						let username = '';
+						let you;
+						users.map((fuser) => {
+							if (newMessage.from === fuser[1]._id) {
+								username = fuser[1].username;
+							}
+							if (props.currentUser === fuser[1]._id) {
+								you = fuser[1].username;
+							}
+						});
+						return (
+							<div className={you === username ? 'float-right' : 'float-left'}>
+								<h4>{username}</h4>
+								<p>{newMessage.message}</p>
+							</div>
+						);
+					})}
+				</div>
+				{title && (
+					<form className='message-form' onSubmit={handleSubmit}>
+						<input
+							type='text'
+							placeholder='Message'
+							className='form-control'
+							value={message}
+							onChange={handleChange}
+						/>
+						<br />
+						<button type='submit'>
+							<i class='fas fa-paper-plane'></i>
+						</button>
+					</form>
+				)}
 			</div>
 		</div>
 	);

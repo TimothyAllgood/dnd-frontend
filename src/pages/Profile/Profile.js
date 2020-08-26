@@ -73,6 +73,7 @@ class Profile extends Component {
 
 	startConversation = (e) => {
 		Conversation.start(this.props.currentUser, this.props.match.params.id);
+		this.props.history.push(`/messages/${this.props.currentUser}`);
 	};
 
 	render() {
