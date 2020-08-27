@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Conversation from '../../models/Conversation';
 import { withRouter } from 'react-router-dom';
-import io from 'socket.io-client';
+import { socket } from '../../util/socket';
 
-const socket = io('https://shrouded-castle-10865.herokuapp.com/');
 require('./Messages.css');
 
 function ConversationContainer(props) {
@@ -27,7 +26,9 @@ function ConversationContainer(props) {
 	});
 
 	useEffect(() => {
+		console.log(socket);
 		socket.on('RECEIVE_MESSAGE', async (data) => {
+			console.log(socket);
 			const messagesEl = document.querySelector('.messages');
 			messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
 			data.sent = new Date();

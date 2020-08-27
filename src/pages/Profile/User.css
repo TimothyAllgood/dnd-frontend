@@ -25,6 +25,32 @@
 	z-index: 1020;
 }
 
+textarea {
+	width: 200px;
+	height: 150px;
+	resize: none;
+	border: 2px solid var(--main-color);
+	transition: border ease 0.3s;
+	-webkit-transition: border ease 0.3s;
+	-moz-transition: border ease 0.3s;
+	-ms-transition: border ease 0.3s;
+	-o-transition: border ease 0.3s;
+	font-family: 'Work Sans';
+	font-size: 1em;
+}
+
+textarea:read-only {
+	background-color: #f1f1f1;
+	border-color: transparent;
+}
+
+input:read-only:focus,
+textarea:read-only:focus,
+input:read-only:focus-within {
+	border: none;
+	outline: none;
+}
+
 @media screen and (min-width: 768px) {
 	.profile-form {
 		display: grid;

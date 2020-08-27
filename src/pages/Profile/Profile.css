@@ -215,7 +215,7 @@ input[type='file'] + .custom-label:hover {
 	border-radius: 50%;
 	position: absolute;
 	right: 0px;
-	bottom: 2px;
+	top: 0;
 	background-color: var(--main-color);
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;

@@ -77,8 +77,10 @@ class Profile extends Component {
 
 	async reverseGeocode(lat, lng) {
 		// Reverse geocode the lat, lng from the geolocation and add city to db
+		const instance = axios.create(); // Removes Authorization from header for tom tom request
+		delete instance.defaults.headers.common['Authorization'];
 		const url = `https://api.tomtom.com/search/2/reverseGeocode/${lat}%2C${lng}.json?key=ojL8SrkEk0ntNQEO0Z1NUfadlxaugNYO`; // Sets url to use value of input for query
-		const res = await axios.get(url); // Returns the data from the api call
+		const res = await instance.get(url); // Returns the data from the api call
 		this.setState({ city: res.data.addresses[0].address.freeformAddress });
 		try {
 			const res = await User.update(this.props.match.params.id, this.state);
@@ -100,19 +102,6 @@ class Profile extends Component {
 				}
 			});
 		});
-		// for (let i = 0; i < checkboxes.length; i++) {
-		// 	for (let j = 0; j < games.length; j++) {
-		// 		console.log(checkboxes[j]);
-
-		// 		console.log(games[j]);
-		// 		console.log(checkboxes[i].value === games[j]);
-		// 		if (checkboxes[i].value === games[j]) {
-		// 			checkboxes[i].checked = 'true';
-		// 		} else {
-		// 			checkboxes[i].checked = 'false';
-		// 		}
-		// 	}
-		// }
 	};
 
 	handleChange = (e) => {
@@ -148,7 +137,9 @@ class Profile extends Component {
 	handleTomTom = async (e) => {
 		// Handles change of tom tom search input
 		const url = `https://api.tomtom.com/search/2/geocode/${e.target.value}.json?key=ojL8SrkEk0ntNQEO0Z1NUfadlxaugNYO`; // Sets url to use value of input for query
-		const res = await axios.get(url); // Returns the data from the api call
+		const instance = axios.create(); // Removes Authorization from header for tom tom request
+		delete instance.defaults.headers.common['Authorization'];
+		const res = await instance.get(url); // Returns the data from the api call
 		const citiesEl = document.getElementById('cities'); // cities
 		citiesEl.style.display = 'initial'; // Display select when input changes
 		citiesEl.innerHTML = ''; // Empty out select
@@ -197,11 +188,9 @@ class Profile extends Component {
 		imgForm.classList.toggle('hidden');
 	};
 
-	toggleReadOnly = (e) => {
-		console.log(e.target.parentElement.parentElement);
-		const parent = e.target.parentElement.parentElement;
-		const inputEl = parent.querySelector('input');
-		const i = parent.querySelector('i');
+	toggleReadOnly = (id) => {
+		const inputEl = document.getElementById(id);
+		const i = document.querySelector(`.${id}`);
 		if (inputEl.readOnly) {
 			inputEl.readOnly = false;
 			i.classList.remove('fa-pencil-alt');
@@ -250,8 +239,16 @@ class Profile extends Component {
 
 	showSelect = (e) => {
 		const selectEl = document.getElementById('roles');
-
+		const i = document.querySelector('.roles-i');
 		selectEl.classList.toggle('select-show');
+
+		if (selectEl.classList.contains('select-show')) {
+			i.classList.remove('fa-pencil-alt');
+			i.classList.add('fa-times');
+		} else {
+			i.classList.add('fa-pencil-alt');
+			i.classList.remove('fa-times');
+		}
 	};
 
 	check = () => {
@@ -287,11 +284,7 @@ class Profile extends Component {
 							<i className='fas fa-times'></i>
 						</span>
 						<h2>Update Profile Image</h2>
-						<img
-							src='https://picsum.photos/150'
-							alt='preview'
-							className='preview'
-						/>
+						<img src={this.state.img} alt='preview' className='preview' />
 						<input
 							onChange={this.handleImgChange}
 							type='file'
@@ -357,8 +350,11 @@ class Profile extends Component {
 									value={state.username}
 									onChange={this.handleChange}
 								/>
-								<span onClick={this.toggleReadOnly} className='toggle-edit'>
-									<i className='fas fa-pencil-alt'></i>
+								<span
+									onClick={() => this.toggleReadOnly('username')}
+									className='toggle-edit'
+								>
+									<i className='fas fa-pencil-alt username'></i>
 								</span>
 							</div>
 							<div className='form-group roles-form'>
@@ -371,23 +367,28 @@ class Profile extends Component {
 									<option value='DM/Player'>DM/Player</option>
 								</select>
 								<span onClick={this.showSelect} className='toggle-edit'>
-									<i className='fas fa-pencil-alt'></i>
+									<i className='fas fa-pencil-alt roles-i'></i>
 								</span>
 							</div>
 							<div className='form-group bio-form'>
 								<label htmlFor='bio'>
 									<h3>About</h3>
 								</label>
-								<input
+								<textarea
 									readOnly
 									type='text'
 									name='bio'
 									id='bio'
 									value={state.bio}
 									onChange={this.handleChange}
-								/>
-								<span onClick={this.toggleReadOnly} className='toggle-edit'>
-									<i className='fas fa-pencil-alt'></i>
+								>
+									{state.bio}
+								</textarea>
+								<span
+									onClick={() => this.toggleReadOnly('bio')}
+									className='toggle-edit'
+								>
+									<i className='fas fa-pencil-alt bio'></i>
 								</span>
 							</div>
 							<div className='form-group city-group'>

@@ -5,9 +5,10 @@ import Routes from './config/Routes';
 import jwt_decode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
 import setAuthHeader from './util/setAuthHeader';
-import io from 'socket.io-client';
+import { socket } from './util/socket';
 
-const socket = io('https://shrouded-castle-10865.herokuapp.com/');
+// http://localhost:4000
+// https://shrouded-castle-10865.herokuapp.com
 
 class App extends React.Component {
 	state = {
@@ -30,19 +31,12 @@ class App extends React.Component {
 				currentUsername: decodedToken.user,
 			});
 
-			console.log(socket.id); // undefined
-
 			socket.on('connect', () => {
-				this.setState({ socket: socket.id });
+				console.log(socket.id);
 				socket.emit('fromClient', {
 					user: this.state.currentUser,
-					socket: this.state.socket,
 				});
-				console.log(socket.id); // 'G5p5...'
-			});
-
-			socket.on('hello', (data) => {
-				console.log(data);
+				console.log('Socket:', socket.id); // 'G5p5...'
 			});
 		}
 	}
