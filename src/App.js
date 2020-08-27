@@ -32,11 +32,9 @@ class App extends React.Component {
 			});
 
 			socket.on('connect', () => {
-				console.log(socket.id);
 				socket.emit('fromClient', {
 					user: this.state.currentUser,
 				});
-				console.log('Socket:', socket.id); // 'G5p5...'
 			});
 		}
 	}

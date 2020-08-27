@@ -11,6 +11,7 @@ function ConversationContainer(props) {
 	const [message, setMessage] = useState('');
 	const [participant, setParticipant] = useState({});
 	const [messages, setMessages] = useState([]);
+	const [rtUsers, setRtUsers] = useState({});
 
 	useEffect(() => {
 		let mounted = true;
@@ -26,12 +27,13 @@ function ConversationContainer(props) {
 	});
 
 	useEffect(() => {
-		console.log(socket);
 		socket.on('RECEIVE_MESSAGE', async (data) => {
-			console.log(socket);
 			const messagesEl = document.querySelector('.messages');
 			messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
 			data.sent = new Date();
+			console.log(data);
+
+			setRtUsers({ from: data.from, to: data.to });
 			addMessage(data);
 		});
 
@@ -87,7 +89,7 @@ function ConversationContainer(props) {
 		e.preventDefault();
 		sendMessage();
 		const messageContent = { message: message };
-		Conversation.addMessage(participant.from, participant.to, messageContent);
+		// Conversation.addMessage(participant.from, participant.to, messageContent);
 	}
 
 	const addMessage = (data) => {
@@ -138,31 +140,34 @@ function ConversationContainer(props) {
 				</div>
 				<div className='messages'>
 					{messages.map((newMessage) => {
-						const users = Object.entries(
-							currentConversation.participants.users
-						);
-						let username = '';
-						let you;
-						users.map((fuser) => {
-							if (newMessage.from === fuser[1]._id) {
-								username = fuser[1].username;
-							}
-							if (props.currentUser === fuser[1]._id) {
-								you = fuser[1].username;
-							}
-						});
-						return (
-							<div
-								key={newMessage._id}
-								className={you === username ? 'float-right' : 'float-left'}
-							>
-								<h4>
-									{username}:{' '}
-									{new Date(Date.parse(newMessage.sent)).toLocaleDateString()}
-								</h4>
-								<p>{newMessage.message}</p>
-							</div>
-						);
+						if (currentConversation.participants) {
+							const users = Object.entries(
+								currentConversation.participants.users
+							);
+							let username = '';
+							let you;
+							users.map((fuser) => {
+								if (newMessage.from === fuser[1]._id) {
+									username = fuser[1].username;
+								}
+								if (props.currentUser === fuser[1]._id) {
+									you = fuser[1].username;
+								}
+							});
+
+							return (
+								<div
+									key={newMessage._id}
+									className={you === username ? 'float-right' : 'float-left'}
+								>
+									<h4>
+										{username}:{' '}
+										{new Date(Date.parse(newMessage.sent)).toLocaleDateString()}
+									</h4>
+									<p>{newMessage.message}</p>
+								</div>
+							);
+						}
 					})}
 				</div>
 				{title && (
