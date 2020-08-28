@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Conversation from '../../models/Conversation';
 import { withRouter } from 'react-router-dom';
-import { socket } from '../../util/socket';
+import io from 'socket.io-client';
+const socket = io('https://shrouded-castle-10865.herokuapp.com');
 
 require('./Messages.css');
 
@@ -11,7 +12,6 @@ function ConversationContainer(props) {
 	const [message, setMessage] = useState('');
 	const [participant, setParticipant] = useState({});
 	const [messages, setMessages] = useState([]);
-	const [rtUsers, setRtUsers] = useState({});
 
 	useEffect(() => {
 		let mounted = true;
@@ -27,21 +27,11 @@ function ConversationContainer(props) {
 	});
 
 	useEffect(() => {
-		socket.on('RECEIVE_MESSAGE', async (data) => {
+		socket.off('RECIEVE_MESSAGE').on('RECEIVE_MESSAGE', async (data) => {
 			const messagesEl = document.querySelector('.messages');
 			messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
 			data.sent = new Date();
-			console.log(data);
-
-			setRtUsers({ from: data.from, to: data.to });
-			addMessage(data);
-		});
-
-		socket.on('RECEIVE_MESSAGE_FROM', async (data) => {
-			const messagesEl = document.querySelector('.messages');
-			messagesEl.scrollTop = messagesEl.scrollHeight + 1000;
-			data.sent = new Date();
-			addMessage(data);
+			setMessages((oldArray) => [...oldArray, data]);
 		});
 	}, []);
 
