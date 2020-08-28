@@ -6,6 +6,8 @@ Link: [DND](http://dndgo.timotheusdesigns.com/)
 
 ![Home Page](./readme_assets/home.png)
 ![Login Page](./readme_assets/login.png)
+![Profile Page](./readme_assets/profile.png)
+![Nearby Page](./readme_assets/nearby.png)
 
 ## User Stories
 
