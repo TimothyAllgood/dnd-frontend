@@ -50,6 +50,10 @@
 	width: 250px;
 }
 
+input[type='password'] {
+	border: 2px solid var(--main-color);
+}
+
 .form-container .btn {
 	cursor: pointer;
 	color: var(--white);
@@ -62,4 +66,28 @@
 
 .form-container .btn:hover {
 	background-color: var(--main-hover);
+}
+
+.switch-form {
+	margin-top: 10px;
+}
+
+.switch-form a {
+	color: var(--accent);
+	transition: color ease 0.5s;
+	-webkit-transition: color ease 0.5s;
+	-moz-transition: color ease 0.5s;
+	-ms-transition: color ease 0.5s;
+	-o-transition: color ease 0.5s;
+}
+
+.switch-form a:hover {
+	color: var(--accent-hover);
+}
+
+@media screen and (min-width: 768px) {
+	.form-container form {
+		width: 500px;
+		padding: 35px 35px 75px;
+	}
 }

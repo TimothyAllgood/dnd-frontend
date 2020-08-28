@@ -19,6 +19,14 @@ nav .container {
 
 .logo a {
 	color: var(--white);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.logo img {
+	margin-top: -15px;
+	height: 60px;
 }
 
 .nav-list {
@@ -37,6 +45,11 @@ nav .container {
 	text-align: center;
 }
 
+.nav-link:hover {
+	cursor: pointer;
+	color: rgb(194, 194, 194);
+}
+
 .inner-menu {
 	width: 100%;
 	background: var(--main-color);
@@ -53,6 +66,11 @@ nav .container {
 .inner-menu .nav-link {
 	background: var(--main-color);
 	border: 1px solid white;
+}
+
+.inner-menu .nav-link:hover {
+	color: white;
+	background-color: var(--main-hover);
 }
 
 .hide-menu {

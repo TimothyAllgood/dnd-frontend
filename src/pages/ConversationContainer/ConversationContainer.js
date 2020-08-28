@@ -89,7 +89,7 @@ function ConversationContainer(props) {
 		e.preventDefault();
 		sendMessage();
 		const messageContent = { message: message };
-		// Conversation.addMessage(participant.from, participant.to, messageContent);
+		Conversation.addMessage(participant.from, participant.to, messageContent);
 	}
 
 	const addMessage = (data) => {

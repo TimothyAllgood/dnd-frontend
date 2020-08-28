@@ -9,7 +9,7 @@ import UserProfile from '../pages/Profile/UserProfile';
 import ConversationContainer from '../pages/ConversationContainer/ConversationContainer';
 import FriendsContainer from '../pages/FriendsContainer/FriendsContainer';
 
-export default ({ currentUser, setCurrentUser }) => (
+export default ({ currentUser, setCurrentUser, logout }) => (
 	<Switch>
 		<Route exact path='/' component={Home} />
 		<Route path='/register' component={Register} />
@@ -26,7 +26,11 @@ export default ({ currentUser, setCurrentUser }) => (
 		<Route
 			path='/profile/:id'
 			render={(matchProps) => (
-				<UserProfile {...matchProps} currentUser={currentUser} />
+				<UserProfile
+					{...matchProps}
+					currentUser={currentUser}
+					logout={logout}
+				/>
 			)}
 		/>
 		<Route

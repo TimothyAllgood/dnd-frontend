@@ -34,4 +34,8 @@ export default class User {
 	static addFriend = async (userID, friend) => {
 		return axios.post(`${BASE_URL}/v1/users/addfriend/${userID}`, friend);
 	};
+
+	static delete = async (userID) => {
+		return axios.delete(`${BASE_URL}/v1/users/${userID}`);
+	};
 }

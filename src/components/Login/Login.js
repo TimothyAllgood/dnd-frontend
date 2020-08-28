@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import User from '../../models/User';
 require('../Register/Form.css');
 require('./Login.css');
@@ -61,7 +61,7 @@ export class Login extends Component {
 						</label>
 						<input
 							onChange={this.handleChange}
-							type='text'
+							type='password'
 							name='password'
 							id='password'
 							value={this.state.password}
@@ -70,6 +70,10 @@ export class Login extends Component {
 					<button className='btn btn-primary' type='submit'>
 						Login
 					</button>
+					<p className='switch-form'>
+						Don't have an account?
+						<NavLink to='/register'>&#x20;Register today!</NavLink>
+					</p>
 					<div id='error' className={this.state.errMsg && 'show'}>
 						{this.state.errMsg}
 					</div>

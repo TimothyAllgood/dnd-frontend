@@ -51,6 +51,68 @@ input:read-only:focus-within {
 	outline: none;
 }
 
+.delete {
+	margin-top: 25px;
+}
+
+.delete span,
+.delete-modal span {
+	background-color: var(--accent);
+}
+
+.delete span:hover,
+.delete-modal span:hover {
+	background-color: var(--accent-hover);
+}
+
+.warning {
+	color: var(--accent);
+	font-weight: bold;
+}
+
+.delete-modal {
+	background-color: white;
+	border: 2px solid var(--accent);
+	position: absolute;
+	z-index: -1023;
+	opacity: 0;
+	height: 200px;
+	width: 100%;
+	top: 25%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	transition: all ease 0.5s;
+	-webkit-transition: all ease 0.5s;
+	-moz-transition: all ease 0.5s;
+	-ms-transition: all ease 0.5s;
+	-o-transition: all ease 0.5s;
+}
+
+.modal-show {
+	opacity: 1;
+	z-index: 1023;
+}
+
+.delete-modal i {
+	position: absolute;
+	color: var(--accent);
+	border: 2px solid var(--accent);
+	padding: 5px 7px;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+	top: 5px;
+	right: 10px;
+}
+
+.delete-modal i:hover {
+	cursor: pointer;
+}
+
 @media screen and (min-width: 768px) {
 	.profile-form {
 		display: grid;

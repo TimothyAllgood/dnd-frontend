@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import logo from './dragon.png';
 import './Navbar.css';
 
 class Navbar extends React.Component {
@@ -26,7 +27,9 @@ class Navbar extends React.Component {
 				<div className='container'>
 					<div className='logo'>
 						<h1>
-							<NavLink to='/'>DnDGo</NavLink>
+							<NavLink to='/'>
+								DnDGo<img src={logo}></img>
+							</NavLink>
 						</h1>
 					</div>
 					<ul className='nav-list'>

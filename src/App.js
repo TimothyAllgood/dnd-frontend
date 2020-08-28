@@ -75,6 +75,7 @@ class App extends React.Component {
 				<Routes
 					currentUser={this.state.currentUser}
 					setCurrentUser={this.setCurrentUser}
+					logout={this.logout}
 				/>
 			</main>
 		);

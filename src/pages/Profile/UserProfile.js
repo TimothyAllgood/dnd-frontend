@@ -261,6 +261,16 @@ class Profile extends Component {
 		User.addFriend(this.props.currentUser, [this.state]);
 	};
 
+	toggleModal = (e) => {
+		const deleteModal = document.querySelector('.delete-modal');
+		deleteModal.classList.toggle('modal-show');
+	};
+
+	deleteUser = (e) => {
+		User.delete(this.props.currentUser);
+		this.props.logout();
+	};
+
 	render() {
 		const state = this.state;
 
@@ -303,9 +313,19 @@ class Profile extends Component {
 					<div className='user-info'>
 						<h2>{state.username}</h2>
 						<p>{state.roles ? state.roles : 'No role'}</p>
-						{!state.friends && !state.currentCheck && (
-							<span onClick={this.addFriend}>Add Friend</span>
-						)}
+						<div className='delete'>
+							<span onClick={this.toggleModal}>Delete User</span>
+						</div>
+						<div className='delete-modal'>
+							<i onClick={this.toggleModal} className='fas fa-times'></i>
+							Are you sure you would like to delete your account?
+							<span onClick={this.deleteUser} className='delete'>
+								Delete User
+							</span>
+							<p className='warning'>
+								<strong>Warning!</strong> This change is permanent.
+							</p>
+						</div>
 					</div>
 				</div>
 				<div className='profile-right'>
